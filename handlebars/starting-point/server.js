@@ -3,7 +3,7 @@ const { check, validationResult } = require('express-validator');
 const Handlebars = require('handlebars')
 const expressHandlebars = require('express-handlebars')
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
-
+const {sequelize}= require ('./db')
 const Restaurant = require('./models/restaurant');
 const Menu = require('./models/menu');
 const MenuItem = require('./models/menuItem');
@@ -14,11 +14,32 @@ initialiseDb();
 const app = express();
 const port = 3000;
 
-
-
 app.use(express.static('public'));
 
 app.use(express.json());
+
+const handlebars = expressHandlebars({
+    handlebars : allowInsecurePrototypeAccess(Handlebars)
+})
+
+app.engine('handlebars', handlebars);
+app.set('view engine', 'handlebars')
+const seedDb = async () => {    
+    // await sequelize.sync({ force: true });
+     const restaurants = [
+ 
+        {name : 'Mcdonald', image : '/img/mcdonalds-ronald-mcdonald.gif'},
+        {name : 'Popeys', image: '/img/popeyes-fried-chicken.gif'},
+        {name : 'KFC', image: '/img/KFC.gif'}
+    ]
+    const restaurantPromises = restaurants.map(restaurant => Restaurant.create(restaurant))
+    await Promise.all(restaurantPromises)
+    console.log("db populated!")
+}
+
+//seedDb();
+
+
 
 
 const restaurantChecks = [
@@ -28,8 +49,9 @@ const restaurantChecks = [
 ]
 
 app.get('/restaurants', async (req, res) => {
-    const restaurants = await Restaurant.findAll();
-    res.json(restaurants);
+    const restaurantList = await Restaurant.findAll();
+   
+    res.render('restaurants',{restaurantList})
 });
 
 app.get('/restaurants/:id', async (req, res) => {
@@ -38,7 +60,8 @@ app.get('/restaurants/:id', async (req, res) => {
             include: MenuItem
         }
     });
-    res.json(restaurant);
+    //res.json(restaurant);
+    res.render('restaurant',{restaurant})
 });
 
 app.post('/restaurants', restaurantChecks, async (req, res) => {
