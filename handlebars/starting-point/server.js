@@ -49,10 +49,26 @@ const restaurantChecks = [
 ]
 
 app.get('/restaurants', async (req, res) => {
-    const restaurantList = await Restaurant.findAll();
+    const restaurants = await Restaurant.findAll();
    
-    res.render('restaurants',{restaurantList})
+    res.render('restaurants',{restaurants})
 });
+
+app.get('/restaurant-data', async (req,res) => {
+    const restaurants = await Restaurant.findAll();
+    res.json({restaurants})
+})
+
+
+app.get('/menu/:id', async (req, res) => {
+    const restaurant = await Restaurant.findByPk(req.params.id, {include: {
+            model: Menu,
+            include: MenuItem
+        }
+    });
+    res.json(restaurant)
+});
+
 
 app.get('/restaurants/:id', async (req, res) => {
     const restaurant = await Restaurant.findByPk(req.params.id, {include: {

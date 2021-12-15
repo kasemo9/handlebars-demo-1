@@ -1,14 +1,24 @@
-<section>
-    <h2>There are {{restaurantList.length}} restaurants</h2>
+{{!-- <section>
+    <h2>There are {{restaurants.length}} restaurants in the list</h2>
    
-    {{#each restaurantList}}
+    {{#each restaurants}}
     <article>
         <h2>{{name}}</h2>
-        <img class="item-img" src="{{image}}"/>
-        <a class = "btn" href="/sauces/{{id}}">View Sauce</a>
+        <img class="rest-img" src="{{image}}"/>
+        <br>
+        <br>
+        <buttonn><a class = "btn" href="/restaurants/{{id}}">View restaurant</a></buttonn>
     </article>
     {{/each}}
+</section> --}}
+
+
+<section>
+	<h2>There are {{restaurants.length}} restaurants</h2>
+	{{#each restaurants}} 
+		<article class="card">
+			<a href="/restaurants/{{id}}"><h2>{{name}}</h2></a>
+			<img class="item-img" src="{{image}}"/>
+		</article>
+	{{/each}}
 </section>
-
-
-
