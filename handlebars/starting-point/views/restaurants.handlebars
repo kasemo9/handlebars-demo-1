@@ -1,18 +1,3 @@
-{{!-- <section>
-    <h2>There are {{restaurants.length}} restaurants in the list</h2>
-   
-    {{#each restaurants}}
-    <article>
-        <h2>{{name}}</h2>
-        <img class="rest-img" src="{{image}}"/>
-        <br>
-        <br>
-        <buttonn><a class = "btn" href="/restaurants/{{id}}">View restaurant</a></buttonn>
-    </article>
-    {{/each}}
-</section> --}}
-
-
 <section>
 	<h2>There are {{restaurants.length}} restaurants</h2>
 	{{#each restaurants}} 
@@ -21,4 +6,7 @@
 			<img class="item-img" src="{{image}}"/>
 		</article>
 	{{/each}}
+      <div>
+        <a href="/new-restaurant" class="new-restaurant-btn">Add New Restaurant!</a>
+    </div>
 </section>

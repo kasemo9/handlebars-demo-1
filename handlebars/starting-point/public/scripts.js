@@ -8,8 +8,11 @@ let menuBtn = document.getElementById('menu-btn')
 let list = document.getElementById('list')
 let menuList = document.getElementById('menu')
 
+
+
 menuBtn.addEventListener('click', async () => {
     const id = window.location.pathname.split('/restaurants/')
+    console.log(id)
     //fetch the menu route from express
     let res = await fetch(`/menu/${id[1]}`)
     //parse as json
@@ -48,4 +51,19 @@ btn.addEventListener('click', async () => {
     for(item of restaurantList.restaurants){
         console.log(item)
     }
+  });
+
+  
+  //find the delete-button in the document
+const deleteBtn = document.querySelector('delete-btn')
+console.log(deleteBtn)
+//add event to delete this sauce
+deleteBtn.addEventListener('click', async () => {
+    //get id from the current url path
+    const id = window.location.pathname.split('/restaurants/')[1]
+    //fetch the menu route from express for this id
+    let res = await fetch(`/restaurants/${id}`, {
+        method: 'DELETE',
+    })
+    console.log(res)
   });

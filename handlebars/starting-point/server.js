@@ -18,6 +18,11 @@ app.use(express.static('public'));
 
 app.use(express.json());
 
+//this new line of code allow you to add restaurant image.
+app.use(express.json())
+app.use(express.urlencoded())
+
+
 const handlebars = expressHandlebars({
     handlebars : allowInsecurePrototypeAccess(Handlebars)
 })
@@ -31,6 +36,7 @@ const seedDb = async () => {
         {name : 'Mcdonald', image : '/img/mcdonalds-ronald-mcdonald.gif'},
         {name : 'Popeys', image: '/img/popeyes-fried-chicken.gif'},
         {name : 'KFC', image: '/img/KFC.gif'}
+        
     ]
     const restaurantPromises = restaurants.map(restaurant => Restaurant.create(restaurant))
     await Promise.all(restaurantPromises)
@@ -89,14 +95,14 @@ app.post('/restaurants', restaurantChecks, async (req, res) => {
     res.sendStatus(201);
 });
 
-app.delete('/restaurants/:id', async (req, res) => {
-    await Restaurant.destroy({
-        where: {
-            id: req.params.id
-        }
-    });
-    res.sendStatus(200);
-});
+// app.delete('/restaurants/:id', async (req, res) => {
+//     await Restaurant.destroy({
+//         where: {
+//             id: req.params.id
+//         }
+//     });
+//     res.sendStatus(200);
+// });
 
 app.put('/restaurants/:id', restaurantChecks, async (req, res) => {
     const errors = validationResult(req);
@@ -113,6 +119,39 @@ app.patch('/restaurants/:id', async (req, res) => {
     await restaurant.update(req.body);
     res.sendStatus(200);
 });
+
+
+
+//New Restaurant go here: 
+app.get('/new-restaurant',async(req,res)=>{
+    const restaurantAlert=""
+    res.render('newrestaurant',{restaurantAlert})
+})
+
+app.post('/new-restaurant',async(req,res)=>{
+const newRestaurant=await Restaurant.create(req.body)
+let restaurantAlert = `${newRestaurant.name} added to your database`
+const foundRestaurant=await Restaurant.findByPk(newRestaurant.id)
+if(foundRestaurant){
+    res.render('newrestaurant',{restaurantAlert})
+}else{
+    restaurantAlert='Failed to add Sauce'
+    res.render('newrestaurant',{restaurantAlert})
+}
+
+})
+
+//DELETE method, sauces/:id path => Deletes a sauce from db.sqlite
+app.delete('/restaurants/:id', async (req,res)=>{
+    const deleteRestaurant = await Restaurant.destroy({
+        where: {id:req.params.id}
+    })
+    const restaurants = await Restaurant.findAll();
+    res.render('restaurants', {restaurants})
+});
+
+
+
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
