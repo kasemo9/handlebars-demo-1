@@ -16,11 +16,11 @@ const port = 3000;
 
 app.use(express.static('public'));
 
-app.use(express.json());
+//app.use(express.json());
 
 //this new line of code allow you to add restaurant image.
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({extended:false}))
 
 
 const handlebars = expressHandlebars({
@@ -53,6 +53,14 @@ const restaurantChecks = [
     check('image').isURL(),
     check('name').isLength({ max: 50 })
 ]
+
+
+
+//*************** ROUTES ******************//
+//index redirects to restaurant
+app.get('/', (req,res)=>{
+    res.redirect('/restaurants')
+})
 
 app.get('/restaurants', async (req, res) => {
     const restaurants = await Restaurant.findAll();
@@ -138,11 +146,19 @@ app.delete('/restaurants/:id', async (req,res)=>{
     const deleterestaurant = await Restaurant.destroy({
         where: {id:req.params.id}
     })
-    const restaurants = await Restaurant.findAll();
-    res.render('restaurants', {restaurants})
-});
+    // const restaurants = await Restaurant.findAll();
+    // res.render('restaurants', {restaurants})
+    res.render(deleterestaurant ? 'Deleted' : 'Deletion Failed')
+})
 
 
+app.put('/restaurants/:id', async (req,res) => {
+    let updatedrestaurant = await Restaurant.update(req.body, {
+        where: {id: req.params.id}
+    })
+    const restaurant = await Restaurant.findByPk(req.params.id)
+    res.render('restaurant', {restaurant})
+})
 
 
 app.listen(port, () => {
