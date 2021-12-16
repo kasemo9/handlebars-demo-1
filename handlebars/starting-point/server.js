@@ -43,7 +43,7 @@ const seedDb = async () => {
     console.log("db populated!")
 }
 
-//seedDb();
+seedDb();
 
 
 
@@ -95,14 +95,6 @@ app.post('/restaurants', restaurantChecks, async (req, res) => {
     res.sendStatus(201);
 });
 
-// app.delete('/restaurants/:id', async (req, res) => {
-//     await Restaurant.destroy({
-//         where: {
-//             id: req.params.id
-//         }
-//     });
-//     res.sendStatus(200);
-// });
 
 app.put('/restaurants/:id', restaurantChecks, async (req, res) => {
     const errors = validationResult(req);
@@ -143,7 +135,7 @@ if(foundRestaurant){
 
 //DELETE method, sauces/:id path => Deletes a sauce from db.sqlite
 app.delete('/restaurants/:id', async (req,res)=>{
-    const deleteRestaurant = await Restaurant.destroy({
+    const deleterestaurant = await Restaurant.destroy({
         where: {id:req.params.id}
     })
     const restaurants = await Restaurant.findAll();

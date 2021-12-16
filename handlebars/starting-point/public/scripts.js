@@ -1,3 +1,6 @@
+  //find the delete-button in the document
+  const deleteBtn = document.querySelector('#delete-btn')
+  console.log(deleteBtn)
 //find element with the id details-btn
 let btn = document.getElementById('details-btn')
 
@@ -54,9 +57,7 @@ btn.addEventListener('click', async () => {
   });
 
   
-  //find the delete-button in the document
-const deleteBtn = document.querySelector('delete-btn')
-console.log(deleteBtn)
+
 //add event to delete this sauce
 deleteBtn.addEventListener('click', async () => {
     //get id from the current url path
@@ -67,3 +68,6 @@ deleteBtn.addEventListener('click', async () => {
     })
     console.log(res)
   });
+
+
+ 
