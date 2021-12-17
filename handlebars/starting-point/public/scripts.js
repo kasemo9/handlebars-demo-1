@@ -53,18 +53,39 @@ menuBtn.addEventListener('click', async () => {
 })
 
 
-//add event listener when this button is clicked
-btn.addEventListener('click', async () => {
+// //add event listener when this button is clicked
+// btn.addEventListener('click', async () => {
+//     //fetch the restaurant-data path from my express server
+//     let res = await fetch('/restaurant-data');
+//     //parse the response as json - just the data
+//     let restaurantList = await res.json();
+//     //console.log the data from the response
+//     list.innerText = ""
+//     for(item of restaurantList.restaurants){
+//         console.log(item)
+//     }
+//   })
+
+
+  btn.addEventListener('click', async () => {
+    list.style.display='block'
+   
     //fetch the restaurant-data path from my express server
     let res = await fetch('/restaurant-data');
     //parse the response as json - just the data
     let restaurantList = await res.json();
     //console.log the data from the response
     list.innerText = ""
+    let allRestaurantContainer=document.createElement('h3')
+    allRestaurantContainer.innerText="All Restaurants:"
+    list.append(allRestaurantContainer)
     for(item of restaurantList.restaurants){
-        console.log(item)
+        let restaurantLabel = document.createElement('h5')
+        restaurantLabel.innerText = item.name
+        list.append(restaurantLabel)
     }
-  })
+  });
+
   
 //add event to delete this sauce
 deleteBtn.addEventListener('click', async () => {
